@@ -1,0 +1,65 @@
+<app-componente-botones-cabecera
+    [tituloCabecera]="almacen ? 'Almacen de Materiales - ' + almacen.nombre : 'Almacen de Materiales'"
+    [botonRetroceder]="true" [botonCancelar]="false" [botonCrearCita]="false" [botonSalirPaciente]="false"
+    [rutaRetroceder]="'administrativo/citas'" [rutaCancelar]="'administrativo/citas'"></app-componente-botones-cabecera>
+
+<div class="row">
+    <div class="col-md-12 d-flex flex-row justify-content-center align-items-center" style="height: 750px;">
+
+        <div class="card" *ngIf="!almacen"> <!-- Agrega *ngIf en el contenedor card -->
+            <div class="card-body">
+                <div class="d-flex justify-content-center align-items-center">
+                    <h4 class="card-title" style="font-weight: 700;">Código de Almacén</h4>
+                </div>
+                <div class="form-group mt-3 d-flex flex-column justify-content-center align-items-center">
+                    <input type="text" class="form-control" id="codigoAlmacen" placeholder="Ingresar código"
+                        [(ngModel)]="codigoAlmacen">
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    <button class="btn btn-primary" (click)="buscarAlmacenPorCodigo()">Comprobar</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="width: 100%; height: 100%;" *ngIf="materiales && materiales.length > 0"
+            class="d-flex justify-content-between">
+
+            <div id="contenedor-materiales" style="width: 60%;" class="container bg-white">
+                <div class="row">
+                    <div class="col-md-4" *ngFor="let material of materiales">
+                        <div class="material-card mb-4">
+                            <div class="image-container">
+                                <img class="material-img" [src]="material.imagenes_material" alt="Imagen del material">
+                            </div>
+                            <div class="material-body">
+                                <h5 class="material-title">{{ material.nombre_producto_hospital }}</h5>
+                                <p class="material-text">Cantidad disponible: {{ material.existencias }}</p>
+                                <button class="btn btn-retirar" (click)="abrirModal(material)">Retirar</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+            <div style="width: 35%;" class="bg-white d-flex flex-column justify-content-between align-items-center p-4">
+
+                <div style="width: 100%; height: 65%; border: 1px solid gray;" id="historial_en_camino">
+
+                </div>
+
+                <div style="width: 100%; height: 30%; border: 1px solid gray;" id="resumen_retirada">
+                    <div *ngFor="let material of materialesRetirados" class="material-retirado">
+                        <span>Material: {{ material.nombre }} <br> Cantidad: {{ material.cantidad }} unidades</span>
+                        <button class="btn btn-sm btn-danger" (click)="eliminarMaterial(material)">X</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary mt-3" (click)="consultarYActualizarExistencias()">Actualizar Existencias</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
